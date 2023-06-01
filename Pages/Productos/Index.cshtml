@@ -1,0 +1,36 @@
+﻿@page
+@model Tienda.Pages.Productos.IndexModel
+
+<h1>Lista de Productos</h1>
+
+<p>
+    <a class="btn btn-success" asp-page="Create">Crear Producto</a>
+</p>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var producto in Model.Productos)
+        {
+            <tr>
+                <td>@producto.Nombre</td>
+                <td>@producto.Precio</td>
+                <td>
+                    <a class="btn btn-primary" asp-page="Edit" asp-route-id="@producto.ProductoId">Editar</a>
+                </td>
+                <td>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@producto.ProductoId" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

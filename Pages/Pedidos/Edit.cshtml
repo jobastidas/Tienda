@@ -1,0 +1,73 @@
+﻿@page
+@model Tienda.Pages.Pedidos.EditModel
+@{
+    ViewData["Title"] = "Editar Pedido";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <input type="hidden" asp-for="Pedido.PedidoId" />
+
+        <label for="productoId">Producto</label>
+        <select class="form-control" id="Producto_Id" asp-for="Pedido.ProductoId">
+            <option value="">Seleccione un producto</option>
+            @foreach (var producto in Model.Productos)
+            {
+                <option value="@producto.ProductoId" t-precio="@producto.Precio">@producto.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="number" class="form-control" id="cantidad" asp-for="Pedido.Cantidad" onchange="calcularPrecioTotal()" required>
+    </div>
+    <div class="form-group">
+        <label for="fechaPedido">Fecha de Pedido</label>
+        <input type="date" class="form-control" id="fechaPedido" asp-for="Pedido.FechaPedido" required>
+    </div>
+    <div class="form-group">
+        <label for="usuarioPedido">Usuario de Pedido</label>
+        <input type="text" class="form-control" id="usuarioPedido" asp-for="Pedido.UsuarioPedido" required>
+    </div>
+    <div class="form-group">
+        <label for="numeroTelefono">Número de Teléfono</label>
+        <input type="text" class="form-control" id="numeroTelefono" asp-for="Pedido.NumeroTelefono" required>
+    </div>
+    <div class="form-group">
+        <label for="total">Total</label>
+        <input type="text" class="form-control" id="total" asp-for="Pedido.Total" readonly>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Crear Pedido</button>
+        <a class="btn btn-secondary" href="/Pedido/Index">Volver</a>
+    </div>
+</form>
+
+<script>
+    function obtenerProductoPorPrecio() {
+        // Obtener el valor del atributo t-precio del elemento seleccionado
+        var precio = document.getElementById('Producto_Id').options[document.getElementById('Producto_Id').selectedIndex].getAttribute('t-precio');
+
+        return parseFloat(precio);
+    }
+
+    function calcularPrecioTotal() {
+        var cantidad = parseFloat(document.getElementById("cantidad").value);
+        var producto = obtenerProductoPorPrecio();
+        var precioTotal = isNaN(cantidad) || isNaN(producto) ? 0 : cantidad * producto;
+
+        document.getElementById("total").value = precioTotal.toFixed(2);
+    }
+
+    // Obtener la fecha actual
+    var fechaActual = new Date().toISOString().split('T')[0];
+
+    // Asignar la fecha actual al campo de fecha de venta
+    document.getElementById("fechaPedido").value = fechaActual;
+
+    // Calcular el precio total al cargar la página
+    calcularPrecioTotal();
+</script>
+

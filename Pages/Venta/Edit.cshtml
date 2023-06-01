@@ -1,0 +1,54 @@
+﻿@page
+@model Tienda.Pages.Venta.EditModel
+@{
+    ViewData["Title"] = "Editar Venta";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Venta.VentaId" />
+    <div class="form-group">
+        <label for="productoId">Producto:</label>
+        <select class="form-control" id="Producto_Id"  asp-for="Venta.ProductoId">
+            @foreach (var producto in Model.Productos)
+            {
+                <option value="@producto.ProductoId" t-precio="@producto.Precio">@producto.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input class="form-control" type="number" id="cantidad"  asp-for="Venta.Cantidad" value="@Model.Venta.Cantidad" onchange="calcularPrecioTotal()" required>
+    </div>
+    <div class="form-group">
+        <label for="precioTotal">Precio Total:</label>
+        <input class="form-control" type="text" id="precioTotal"  asp-for="Venta.PrecioTotal"  value="@Model.Venta.PrecioTotal" readonly required>
+    </div>
+    <div class="form-group">
+        <label for="fechaVenta">Fecha de Venta:</label>
+        <input class="form-control" type="date" id="fechaVenta"   asp-for="Venta.FechaVenta"  value="@Model.Venta.FechaVenta.ToString("yyyy-MM-dd")" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="/Venta/Index">Cancelar</a>
+</form>
+<script>
+    function obtenerProductoPorPrecio() {
+        // Obtener el valor del atributo t-precio del elemento seleccionado
+        var precio = document.getElementById('Producto_Id').options[document.getElementById('Producto_Id').selectedIndex].getAttribute('t-precio');
+
+        return parseFloat(precio);
+    }
+
+    function calcularPrecioTotal() {
+        var cantidad = parseFloat(document.getElementById("cantidad").value);
+        var producto = obtenerProductoPorPrecio();
+        var precioTotal = isNaN(cantidad) || isNaN(producto) ? 0 : cantidad * producto;
+        console.log(precioTotal)
+
+        document.getElementById("precioTotal").value = precioTotal.toFixed(2);
+    }
+
+    //calcularPrecioTotal();
+
+</script>

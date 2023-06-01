@@ -1,0 +1,57 @@
+﻿@page
+@model Tienda.Pages.Venta.CreateModel
+@{
+    ViewData["Title"] = "Crear Venta";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="productoId">Producto:</label>
+        <select class="form-control" id="Producto_Id" name="ProductoId">
+            @foreach (var producto in Model.Productos)
+            {
+                <option value="@producto.ProductoId" t-precio="@producto.Precio">@producto.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input class="form-control" type="number" id="cantidad" name="Cantidad" onchange="calcularPrecioTotal()" required>
+    </div>
+    <div class="form-group">
+        <label for="precioTotal">Precio Total:</label>
+        <input class="form-control" type="number" step="0.01" id="precioTotal" name="PrecioTotal" readonly required>
+    </div>
+    <div class="form-group">
+        <label for="fechaVenta">Fecha de Venta:</label>
+        <input class="form-control" type="date" id="fechaVenta" name="FechaVenta" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="/Venta/Index">Cancelar</a>
+</form>
+
+<script>
+    function obtenerProductoPorPrecio() {
+        // Obtener el valor del atributo t-precio del elemento seleccionado
+        var precio = document.getElementById('Producto_Id').options[document.getElementById('Producto_Id').selectedIndex].getAttribute('t-precio');
+        console.log(precio)
+        return parseFloat(precio);
+    }
+
+    function calcularPrecioTotal() {
+        var cantidad = parseFloat(document.getElementById("cantidad").value);
+        var producto = obtenerProductoPorPrecio();
+        var precioTotal = isNaN(cantidad) || isNaN(producto) ? 0 : cantidad * producto;
+        console.log(precioTotal)
+
+        document.getElementById("precioTotal").value = precioTotal.toFixed(2);
+    }
+
+    // Obtener la fecha actual
+    var fechaActual = new Date().toISOString().split('T')[0];
+
+    // Asignar la fecha actual al campo de fecha de venta
+    document.getElementById("fechaVenta").value = fechaActual;
+</script>

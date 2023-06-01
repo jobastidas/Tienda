@@ -1,0 +1,50 @@
+﻿@page
+@model Tienda.Pages.Pedido.IndexModel
+@{
+    ViewData["Title"] = "Listado de Pedidos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-success" asp-page="Create">Crear Venta</a>
+</p>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Producto</th>
+            <th>No. Venta</th>
+            <th>Cantidad</th>
+            <th>Fecha de Pedido</th>
+            <th>Usuario de Pedido</th>
+            <th>Número de Teléfono</th>
+            <th>Total</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pedido in Model.Pedidos)
+        {
+            <tr>
+                <td>@pedido.Producto.Nombre</td>
+                <td>@pedido.Venta.VentaId</td>
+                <td>@pedido.Cantidad</td>
+                <td>@pedido.FechaPedido</td>
+                <td>@pedido.UsuarioPedido</td>
+                <td>@pedido.NumeroTelefono</td>
+                <td>@pedido.Total</td>
+                <td>
+                    <a class="btn btn-primary" asp-page="Edit" asp-route-id="@pedido.PedidoId">Editar</a>
+                </td> 
+                <td> 
+                 <form method="post" asp-page-handler="Delete" asp-route-id="@pedido.PedidoId" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
